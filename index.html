@@ -240,55 +240,49 @@
     </div>
   </div>
 
-  <!-- Main Game UI -->
-  <div class="container">
-    <header>
-      <h1>Numeral</h1>
-    </header>
-    <main>
-      <div class="game-area">
-        <div class="board-panel">
-          <div class="board">
-            <div class="guess-row" data-row="1">
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="1" data-col="1" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="1" data-col="2" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="1" data-col="3" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="1" data-col="4" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="1" data-col="5" />
-            </div>
-            <div class="guess-row" data-row="2">
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="2" data-col="1" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="2" data-col="2" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="2" data-col="3" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="2" data-col="4" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="2" data-col="5" />
-            </div>
-            <div class="guess-row" data-row="3">
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="3" data-col="1" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="3" data-col="2" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="3" data-col="3" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="3" data-col="4" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="3" data-col="5" />
-            </div>
-            <div class="guess-row" data-row="4">
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="4" data-col="1" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="4" data-col="2" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="4" data-col="3" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="4" data-col="4" />
-              <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="4" data-col="5" />
-            </div>
+<div class="container">
+  <!-- Single header, with title and Show Rules button -->
+  <header>
+    <h1>Numeral</h1>
+    <button id="show-rules-btn" class="start-puzzle-btn">Show Rules</button>
+  </header>
+
+  <!-- Main game area -->
+  <main>
+    <div class="game-area">
+      <div class="board-panel">
+        <div class="board">
+          <!-- Rows 1–4 as before -->
+          <div class="guess-row" data-row="1">
+            <input class="cell-input" maxlength="1" type="text" inputmode="numeric" data-row="1" data-col="1" />
+            <!-- … cols 2–5 … -->
           </div>
-          <div class="input-row">
-            <button id="submit-btn">Submit</button>
+          <div class="guess-row" data-row="2">
+            <!-- … -->
+          </div>
+          <div class="guess-row" data-row="3">
+            <!-- … -->
+          </div>
+          <div class="guess-row" data-row="4">
+            <!-- … -->
           </div>
         </div>
-        <div class="hint-box">
-          <h2>Hints</h2>
-          <ul id="hint-list"></ul>
+
+        <!-- Submit button below the board -->
+        <div class="input-row">
+          <button id="submit-btn">Submit</button>
         </div>
       </div>
-    </main>
-  </div>
+
+      <!-- Hint box alongside -->
+      <div class="hint-box">
+        <h2>Hints</h2>
+        <ul id="hint-list"></ul>
+      </div>
+    </div>
+  </main>
+</div>
+
 
   <script src="logic.js"></script>
 </body>
