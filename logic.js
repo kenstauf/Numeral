@@ -191,6 +191,11 @@ function init() {
     showHints();
   });
 
+    // “Show Rules” button 
+  showRulesBtn.addEventListener('click', () => {
+    modal.style.display = 'flex';
+  });
+
   // Input navigation & auto-advance
   getAllInputs().forEach((inp, idx, all) => {
     inp.addEventListener('input', e => {
