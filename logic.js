@@ -71,34 +71,83 @@ function addNextHint() {
     showHints();
   }
 }
+// ─── CHECK FOR WIN ──────────────────────────────────────────────────────────
+// return true if guessArr exactly matches answerArr
+function checkWin(guessArr, answerArr) {
+  return guessArr.every((digit, i) => digit === answerArr[i]);
+}
+
+// ─── FUN WIN ANIMATION ──────────────────────────────────────────────────────────
+
+// Launches a 2-second confetti burst from both sides
+function runConfetti() {
+  const duration = 2 * 1000;
+  const end = Date.now() + duration;
+
+  (function frame() {
+    // left-side burst
+    confetti({
+      particleCount: 5,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 }
+    });
+    // right-side burst
+    confetti({
+      particleCount: 5,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 }
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  })();
+}
 
 // ─── GUESS GRADING ──────────────────────────────────────────────────────────
 
 function submitGuess() {
-  const inputs = Array.from(getRowInputs(activeRow));
-  const guess = inputs.map(i => i.value).join('');
-  if (guess.length < totalCols) {
+  const inputs   = Array.from(getRowInputs(activeRow));
+  const guess    = inputs.map(i => i.value).join('');
+  const guessArr = guess.split('');
+  const answerArr= answer.split('');
+
+  // 1) ensure full row
+  if (guessArr.length < totalCols || guessArr.some(d => d === '')) {
     alert('Please enter a 5-digit guess.');
     inputs[0].focus();
     return;
   }
 
-  // clear previous
+  // 2) did they win?
+  if (checkWin(guessArr, answerArr)) {
+    // mark them all green
+    inputs.forEach(i => i.classList.add('correct'));
+    // CONFETTI TIME HELL YEAH
+    runConfetti();
+    
+    alert('🎉 You got it!');
+    return; // stop here—don't advance row or add hints
+  }
+
+  // 3) clear old classes
   inputs.forEach(i => i.classList.remove('correct','present','absent'));
 
-  const guessArr   = guess.split('');
-  const answerArr  = answer.split('');
+  // 4) grade non-winning guess
   const answerUsed = Array(totalCols).fill(false);
   const guessUsed  = Array(totalCols).fill(false);
 
-  // 1) green pass
+  // 4a) green pass
   for (let i = 0; i < totalCols; i++) {
     if (guessArr[i] === answerArr[i]) {
       inputs[i].classList.add('correct');
       answerUsed[i] = guessUsed[i] = true;
     }
   }
-  // 2) yellow / gray pass
+
+  // 4b) yellow/gray pass
   for (let i = 0; i < totalCols; i++) {
     if (guessUsed[i]) continue;
     let found = false;
@@ -113,7 +162,7 @@ function submitGuess() {
     if (!found) inputs[i].classList.add('absent');
   }
 
-  // lock & advance
+  // 5) lock & advance
   inputs.forEach(i => i.setAttribute('readonly','readonly'));
   advanceRow();
   addNextHint();
