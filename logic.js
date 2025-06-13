@@ -1,5 +1,3 @@
-// logic.js
-
 // ─── Game State ─────────────────────────────────────────────────────────────
 
 let activeRow = 1;
@@ -7,7 +5,7 @@ const totalRows = 4;
 const totalCols = 5;
 
 function getAnswer() {
-  // Decodes the base64 string
+  // Decodes the answer
   return atob("MDkyMjY=");
 }
 const answer = getAnswer(); // sorry you can't cheat!
@@ -17,7 +15,7 @@ const allHints = [
   "2. (Digit 1 + Digit 2) - 1 = Digit 4 + Digit 5",
   "3. At least one digit repeats",
   "4. Digit 3 + Digit 4 = Digit 5 - Digit 3"
-];
+]; //Well I guess you can cheat by seeing all the hints, but thats not fun
 let revealedHints = [ allHints[0] ];
 
 // ─── DOM UTILITIES ─────────────────────────────────────────────────────────
@@ -128,7 +126,6 @@ function submitGuess() {
     // CONFETTI TIME HELL YEAH
     runConfetti();
     
-    alert('🎉 You got it!');
     return; // stop here—don't advance row or add hints
   }
 
@@ -171,30 +168,38 @@ function submitGuess() {
 // ─── INITIALIZATION ─────────────────────────────────────────────────────────
 
 function init() {
-  // Show the modal
-  const modal    = document.getElementById('rulesModal');
-  const startBtn = document.getElementById('start-game-btn');
-  const submitBtn = document.getElementById('submit-btn');
+  // Grab key elements
+  const modal        = document.getElementById('rulesModal');
+  const startBtn     = document.getElementById('start-game-btn');
+  const submitBtn    = document.getElementById('submit-btn');
+  const toggleBtn    = document.querySelector('.rules-toggle');
+  const rulesPanel   = document.querySelector('.rules-panel');
 
-  if (!modal || !startBtn || !submitBtn) {
-    console.error('Missing modal, start-game-btn, or submit-btn in DOM');
+  if (!modal || !startBtn || !submitBtn || !toggleBtn || !rulesPanel) {
+    console.error('Missing one of: rulesModal, start-game-btn, submit-btn, rules-toggle or rules-panel');
     return;
   }
 
+  // 1) Show the modal on load
   modal.style.display = 'flex';
 
-  // Start button hides modal and kicks off game
+  // 2) Start Game: hide modal & kick off game
   startBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
+    modal.style.display    = 'none';
     startBtn.style.display = 'none';
     setActiveRow(activeRow);
     showHints();
   });
 
-  // Input navigation & auto-advance
+  // 3) Toggle the Rules Recap panel
+  toggleBtn.addEventListener('click', () => {
+    rulesPanel.classList.toggle('expanded');
+  });
+
+  // 4) Input navigation & auto-advance
   getAllInputs().forEach((inp, idx, all) => {
     inp.addEventListener('input', e => {
-      e.target.value = e.target.value.replace(/[^0-9]/g,'').slice(0,1);
+      e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 1);
       if (e.target.value && idx < all.length - 1) {
         const next = all[idx + 1];
         if (next.dataset.row === e.target.dataset.row && !next.hasAttribute('readonly')) {
@@ -223,10 +228,10 @@ function init() {
     });
   });
 
-  // Submit button
+  // 5) Submit button
   submitBtn.addEventListener('click', submitGuess);
 
-  // Unlock first row
+  // 6) Unlock first row
   setActiveRow(activeRow);
 }
 
@@ -235,5 +240,5 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-  console.log("version 1.1")
 }
+
