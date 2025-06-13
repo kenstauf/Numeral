@@ -215,6 +215,49 @@
       cursor: not-allowed;
       box-shadow: none;
     }
+
+.rules-panel {
+  margin-top: 24px;
+  background: #f0f4f8;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  max-height: 3rem; /* only the button at first */
+}
+
+.rules-content {
+  padding: 0 16px 16px;
+}
+
+.rules-panel.expanded {
+  max-height: 200vh; /* big enough to show the list */
+}
+
+.rules-toggle {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.rules-toggle::before {
+  content: '▶';
+  display: inline-block;
+  width: 1em;
+  transition: transform 0.3s ease;
+}
+
+.rules-panel.expanded .rules-toggle::before {
+  transform: rotate(90deg);
+}
+
+
   </style>
 </head>
 <body>
@@ -287,9 +330,28 @@
           <ul id="hint-list"></ul>
         </div>
       </div>
-    </main>
-  </div>
+</main>
 
+<section class="rules-panel collapsed">
+  <!-- toggle button in place of <h2> -->
+  <button type="button" class="rules-toggle">
+      Rules
+  </button>
+  <div class="rules-content">
+    <ul>
+      <li>Guess the correct 5-digit number.</li>
+      <li>Each digit will be a numeral between 0-9.</li>
+      <li><strong>Gray</strong> = digit not in answer.</li>
+      <li><strong>Yellow</strong> = digit in answer but wrong spot.</li>
+      <li><strong>Green</strong> = correct digit in correct spot.</li>
+      <li>Hints are true statements about the final answer.</li>
+      <li>Hints do not change based on your input.</li>
+    </ul>
+  </div>
+</section>
+</div> 
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script src="logic.js"></script>
 </body>
 </html>
