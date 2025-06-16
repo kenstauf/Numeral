@@ -1,9 +1,14 @@
 {
-  "answer": "MDkyMjY=",
-  "hints": [
-    "MS4gRGlnaXQgMiBpcyBvZGQsIERpZ2l0IDMgaXMgZXZlbg==",
-    "Mi4gKERpZ2l0IDEgKyBEaWdpdCAyKSAtaCA9IERpZ2l0IDQgKyBHaWdpdCA1",
-    "My4gQXQgbGVhc3Qgb25lIGRpZ2l0IHJlcGVhdHM=",
-    "NC4gRGlnaXQgMyArIERpZ2l0IDQgPSBEaWdpdCA1IC0gRGlnaXQgMw=="
+  "puzzles": [
+    {
+      "date": "2025-06-16",
+      "answer": "MTM2Mzc=",  
+      "hints": [
+        "VGhlIGFuc3dlciB0byB0aGUgcHV6emxlIGlzIHRoZSB0b3RhbCBudW1iZXIgb2YgTWNEb25hbGRzIGluIHRoZSBVLlMgKE5vIGdvb2dsaW5nKQ==",
+        "RGlnaXQgMSBpcyB0aGUgc21hbGxlc3QgZGlnaXQsIGFuZCBEaWdpdCA1IGlzIHRoZSBsYXJnZXN0IGRpZ2l0Lg==",
+        "RGlnaXQgMiBhbmQgRGlnaXQgNCBhcmUgc2FtZQo=", 
+        "RGlnaXQgMSArIERpZ2l0IDMgPSBEaWdpdCA1"
+      ]
+    }
   ]
 }
