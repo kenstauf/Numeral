@@ -8,7 +8,7 @@ const totalCols = 5;
 
 let answer;
 let allHints = [];
-let revealedHints = [ allHints[0] ];
+let revealedHints = [];
 
 // Load & decode the puzzle for today's date (or fallback)
 async function loadGameData() {
@@ -37,6 +37,7 @@ async function loadGameData() {
 
     // Decode hints
     allHints = todaysPuzzle.hints.map(h => atob(h));
+    revealedHints = [ allHints[0] ];
 
   } catch (err) {
     console.error('Failed to load game data:', err);
