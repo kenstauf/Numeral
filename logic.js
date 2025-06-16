@@ -13,19 +13,27 @@ let revealedHints = [ allHints[0] ];
 // Load & decode the puzzle for today's date (or fallback)
 async function loadGameData() {
   try {
-    const res  = await fetch('data.json');
+    const res   = await fetch('data.json');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();  // e.g. { puzzles: [ { date, answer, hints }, … ] }
+    const data  = await res.json();  // { puzzles: [ { date, answer, hints }, … ] }
 
     // Build today’s date string in YYYY-MM-DD
-    const today = new Date().toISOString().split('T')[0];
+    const todayISO = new Date().toISOString().split('T')[0];
+
+    // ALSO: update the <h1> to show a human‐friendly date
+    const titleEl = document.querySelector('h1');
+    if (titleEl) {
+      const opts = { year:'numeric', month:'long', day:'numeric' };
+      const niceDate = new Date().toLocaleDateString(undefined, opts);
+      titleEl.textContent = `Numeral — ${niceDate}`;
+    }
 
     // Find the puzzle for today (or fallback to first)
-    const todaysPuzzle = data.puzzles.find(p => p.date === today) 
+    const todaysPuzzle = data.puzzles.find(p => p.date === todayISO)
                       || data.puzzles[0];
 
     // Decode answer
-    answer = atob(todaysPuzzle.answer);
+    answer   = atob(todaysPuzzle.answer);
 
     // Decode hints
     allHints = todaysPuzzle.hints.map(h => atob(h));
