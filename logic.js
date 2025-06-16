@@ -4,19 +4,36 @@ let activeRow = 1;
 const totalRows = 4;
 const totalCols = 5;
 
-function getAnswer() {
-  // Decodes the answer
-  return atob("MDkyMjY=");
-}
-const answer = getAnswer(); // sorry you can't cheat!
+// ─── LOAD INFO FROM JSON BASED ON DATE ─────────────────────────────────────────────────────────
 
-const allHints = [
-  "1. Digit 2 is odd, Digit 3 is even",
-  "2. (Digit 1 + Digit 2) - 1 = Digit 4 + Digit 5",
-  "3. At least one digit repeats",
-  "4. Digit 3 + Digit 4 = Digit 5 - Digit 3"
-]; //Well I guess you can cheat by seeing all the hints, but thats not fun
+let answer;
+let allHints = [];
 let revealedHints = [ allHints[0] ];
+
+// Load & decode the puzzle for today's date (or fallback)
+async function loadGameData() {
+  try {
+    const res  = await fetch('data.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();  // e.g. { puzzles: [ { date, answer, hints }, … ] }
+
+    // Build today’s date string in YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0];
+
+    // Find the puzzle for today (or fallback to first)
+    const todaysPuzzle = data.puzzles.find(p => p.date === today) 
+                      || data.puzzles[0];
+
+    // Decode answer
+    answer = atob(todaysPuzzle.answer);
+
+    // Decode hints
+    allHints = todaysPuzzle.hints.map(h => atob(h));
+
+  } catch (err) {
+    console.error('Failed to load game data:', err);
+  }
+}
 
 // ─── DOM UTILITIES ─────────────────────────────────────────────────────────
 
@@ -167,36 +184,40 @@ function submitGuess() {
 
 // ─── INITIALIZATION ─────────────────────────────────────────────────────────
 
-function init() {
-  // Grab key elements
-  const modal        = document.getElementById('rulesModal');
-  const startBtn     = document.getElementById('start-game-btn');
-  const submitBtn    = document.getElementById('submit-btn');
-  const toggleBtn    = document.querySelector('.rules-toggle');
-  const rulesPanel   = document.querySelector('.rules-panel');
+// Make init async so we can await the JSON load
+async function init() {
+  // 0) Load today’s puzzle data (answer + hints)
+  await loadGameData();
+
+  // 1) Grab key elements
+  const modal      = document.getElementById('rulesModal');
+  const startBtn   = document.getElementById('start-game-btn');
+  const submitBtn  = document.getElementById('submit-btn');
+  const toggleBtn  = document.querySelector('.rules-toggle');
+  const rulesPanel = document.querySelector('.rules-panel');
 
   if (!modal || !startBtn || !submitBtn || !toggleBtn || !rulesPanel) {
     console.error('Missing one of: rulesModal, start-game-btn, submit-btn, rules-toggle or rules-panel');
     return;
   }
 
-  // 1) Show the modal on load
+  // 2) Show the modal on load
   modal.style.display = 'flex';
 
-  // 2) Start Game: hide modal & kick off game
+  // 3) Start Game: hide modal & kick off game
   startBtn.addEventListener('click', () => {
-    modal.style.display    = 'none';
-    startBtn.style.display = 'none';
+    modal.style.display     = 'none';
+    startBtn.style.display  = 'none';
     setActiveRow(activeRow);
     showHints();
   });
 
-  // 3) Toggle the Rules Recap panel
+  // 4) Toggle the Rules Recap panel
   toggleBtn.addEventListener('click', () => {
     rulesPanel.classList.toggle('expanded');
   });
 
-  // 4) Input navigation & auto-advance
+  // 5) Input navigation & auto-advance
   getAllInputs().forEach((inp, idx, all) => {
     inp.addEventListener('input', e => {
       e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 1);
@@ -228,17 +249,26 @@ function init() {
     });
   });
 
-  // 5) Submit button
+  // 6) Submit button
   submitBtn.addEventListener('click', submitGuess);
 
-  // 6) Unlock first row
+  // 7) Unlock first row
   setActiveRow(activeRow);
 }
+
+// Run init after DOM ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
 
 // Run after DOM ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
+  console.log("version 1.1")
 }
 
