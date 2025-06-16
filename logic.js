@@ -13,36 +13,40 @@ let revealedHints = [];
 // Load & decode the puzzle for today's date (or fallback)
 async function loadGameData() {
   try {
-    const res   = await fetch('data.json');
+    const res    = await fetch('data.json');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data  = await res.json();  // { puzzles: [ { date, answer, hints }, … ] }
+    const data   = await res.json();  // { puzzles: [ { date, answer, hints }, … ] }
 
-    // Build today’s date string in YYYY-MM-DD
-    const todayISO = new Date().toISOString().split('T')[0];
+    // Build today’s date strings
+    const todayISO  = new Date().toISOString().split('T')[0];
+    const todayNice = new Date().toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
 
-    // ALSO: update the <h1> to show a human‐friendly date
-    const titleEl = document.querySelector('h1');
-    if (titleEl) {
-      const opts = { year:'numeric', month:'long', day:'numeric' };
-      const niceDate = new Date().toLocaleDateString(undefined, opts);
-      titleEl.textContent = `Numeral — ${niceDate}`;
+    // Update the subtitle with the “last updated” date
+    const updatedEl = document.getElementById('last-updated');
+    if (updatedEl) {
+      updatedEl.textContent = `Updated: ${todayNice}`;
     }
 
-    // Find the puzzle for today (or fallback to first)
+    // Pick today’s puzzle (or fallback to the first)
     const todaysPuzzle = data.puzzles.find(p => p.date === todayISO)
                       || data.puzzles[0];
 
     // Decode answer
     answer   = atob(todaysPuzzle.answer);
 
-    // Decode hints
-    allHints = todaysPuzzle.hints.map(h => atob(h));
-    revealedHints = [ allHints[0] ];
+    // Decode hints and seed first hint
+    allHints       = todaysPuzzle.hints.map(h => atob(h));
+    revealedHints  = [ allHints[0] ];
 
   } catch (err) {
     console.error('Failed to load game data:', err);
   }
 }
+
 
 // ─── DOM UTILITIES ─────────────────────────────────────────────────────────
 
@@ -278,6 +282,6 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
-  console.log("version 1.1")
+  console.log("version 1.12")
 }
 
