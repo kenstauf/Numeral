@@ -1,6 +1,17 @@
 {
   "puzzles": [
     {
+      "date": "2025-06-18",
+      "answer": "NzE4Mjk=",  
+      "hints": [
+        "RGlnaXQgMSArIERpZ2l0IDIgPSBEaWdpdCAz",
+        "RGlnaXQgMSArIERpZ2l0IDQgPSBEaWdpdCA1",
+        "RGlnaXQgNCBpcyBleGFjdGx5IG9uZSBncmVhdGVyIHRoYW4gRGlnaXQgMg==", 
+        "U3VtIG9mIGFsbCBmaXZlIGRpZ2l0cyA9IDI3"
+      ]
+    }
+
+    {
       "date": "2025-06-16",
       "answer": "MTM2Mzc=",  
       "hints": [
